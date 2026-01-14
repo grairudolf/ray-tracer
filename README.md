@@ -56,39 +56,118 @@ Notes on the implementation
 - Dielectric materials compute refraction using Snell's Law. When refraction is
     not possible (total internal reflection), the ray is reflected. Fresnel
     reflectance is approximated using the Schlick approximation.
+# Simple Physically-Based Ray Tracer (Python)
+
+![Render](render.png)
+
+This is a compact, educational ray tracer implemented in pure Python. It
+focuses on clarity and correctness over performance — a learning project to
+teach the fundamentals of ray tracing: rays, intersections, materials,
+and a simple camera.
+
+What is a ray tracer?
+----------------------
+
+A ray tracer simulates light by tracing paths (rays) from a camera into a
+scene. For each pixel we shoot rays, find the nearest object intersection,
+compute the surface response (diffuse reflection, metallic reflection,
+refraction), and accumulate color. This project implements basic materials
+(Lambertian diffuse, metal, dielectric) and recursive sampling for indirect
+lighting.
+
+Project overview
+----------------
+
+- `main.py` — CLI renderer. Produces `render.ppm` (ASCII PPM). If Pillow is
+    installed the script also saves `render.png`.
+- `vec3.py` — 3D vector helpers and random sampling routines.
+- `ray.py` — Ray class (origin + direction parameterized by `t`).
+- `hittable.py` — Sphere geometry and intersection logic.
+- `hittable_list.py` — Scene container that aggregates hittable objects.
+- `material.py` — `Lambertian`, `Metal`, `Dielectric` material models.
+- `camera.py` — Simple perspective camera with `lookfrom`, `lookat`, FOV.
+- `scene.py` — Small example scene builder used by `main.py`.
+- `visualize.py` — Utility to analyze rendered images (e.g., luminance
+    histogram).
+
+Quick setup
+-----------
+
+1. Create a virtual environment (recommended):
+
+```powershell
+python -m venv .venv
+.venv\Scripts\activate
+```
+
+2. Install optional dependencies (Pillow for PNG output, matplotlib for
+     visualization):
+
+```powershell
+pip install -r requirements.txt
+```
+
+Rendering an image
+------------------
+
+Run the renderer with default settings:
+
+```powershell
+python main.py
+```
+
+Output files:
+- `render.ppm` — ASCII PPM image produced by the renderer.
+- `render.png` — PNG version produced when Pillow is installed. If you do
+    not see `render.png`, you can convert `render.ppm` to PNG using the helper
+    `convert_ppm_to_png.py` included in this repository:
+
+```powershell
+python convert_ppm_to_png.py render.ppm render.png
+```
+
+CLI options (supported by `main.py`)
+- `--width` — image width in pixels (default 200)
+- `--samples` — samples per pixel (default 20)
+- `--depth` — recursion depth / max bounces (default 10)
+- `--out` — output file prefix (default `render`, producing `render.ppm` / `render.png`)
+
+Notes on how the code works
+--------------------------
+
+- For each pixel the renderer performs multiple random samples (antialiasing)
+    and averages the results. Each sample spawns a primary ray from the
+    camera.
+- Intersections are computed per-object (sphere math in `hittable.py`). If a
+    hit occurs, the material determines whether a scattered ray is spawned
+    (diffuse bounce, reflection, or refraction) and returns an attenuation
+    color.
+- The renderer accumulates radiance recursively until the bounce `depth`
+    limit is reached or no further scattering occurs.
+
+Generating the demonstration image
+----------------------------------
+
+The repository includes `render.png` in the README as an example. If you do
+not have `render.png` in your working directory, run the renderer to produce
+`render.ppm`, then convert it using `convert_ppm_to_png.py`.
 
 Extending the tracer
-- Add more geometry types by implementing the `Hittable` interface
-- Add textured materials by modulating albedo per-surface point
-- Replace the point-light model with an emissive area light for softer shadows
+--------------------
 
-Virtual environment and installation
+- Add new geometry by implementing the `Hittable` interface used by
+    `hittable_list.py`.
+- Implement textured materials by modifying albedo per-hit point.
+- Replace point lights with emissive area lights for softer shadows.
 
-1. Create project folder and venv (example on Windows PowerShell):
+Helper: PPM → PNG converter
+---------------------------
 
-```powershell
-mkdir C:\Users\<you>\Desktop\projects\ray-traycer
-robocopy C:\workspace C:\Users\<you>\Desktop\projects\ray-traycer /MIR
-C:\path\to\python.exe -m venv C:\Users\<you>\Desktop\projects\ray-traycer\.venv
-C:\Users\<you>\Desktop\projects\ray-traycer\.venv\Scripts\python.exe -m pip install -r C:\Users\<you>\Desktop\projects\ray-traycer\requirements.txt
-```
-
-2. Run the renderer inside the venv:
-
-```powershell
-C:\Users\<you>\Desktop\projects\ray-traycer\.venv\Scripts\python.exe main.py --width 400 --samples 50 --depth 10 --out my_render
-```
-
-Visualization
-
-Use the included `visualize.py` to produce a luminance histogram from the rendered image. Example:
-
-```powershell
-C:\Users\<you>\Desktop\projects\ray-traycer\.venv\Scripts\python.exe visualize.py --input my_render.png --out lum_hist.png
-```
-
-The script accepts PNG (preferred) or ASCII PPM (`.ppm`) as input and writes a PNG histogram.
+Use `convert_ppm_to_png.py render.ppm render.png` to create a PNG when
+Pillow is available.
 
 License
-This code is provided for educational purposes—no license is included.
+-------
+
+Provided for educational purposes. No license attached.
 

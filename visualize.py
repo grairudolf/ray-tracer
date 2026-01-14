@@ -4,6 +4,7 @@ This script loads a PNG or PPM image produced by the renderer, computes
 luminance for each pixel, and plots a histogram of luminance values using
 Matplotlib. It saves the histogram as a PNG.
 """
+
 import argparse
 import math
 import sys
