@@ -1,0 +1,2 @@
+Pillow>=9.0.0  # Optional: install to enable PNG output
+matplotlib>=3.0.0  # For data visualization (luminance histogram)
