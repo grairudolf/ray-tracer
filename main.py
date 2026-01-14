@@ -84,7 +84,7 @@ def ray_color(ray, world, lights, depth):
     return direct + indirect
 
 
-def render(image_width: int = 2000, samples_per_pixel: int = 20, max_depth: int = 15, out_prefix: str = 'render'):
+def render(image_width: int = 200, samples_per_pixel: int = 20, max_depth: int = 10, out_prefix: str = 'render'):
     # Image
     aspect_ratio = 16.0 / 9.0
     image_height = int(image_width / aspect_ratio)
@@ -137,9 +137,9 @@ def render(image_width: int = 2000, samples_per_pixel: int = 20, max_depth: int 
 
 def parse_args_and_run():
     parser = argparse.ArgumentParser(description='Simple physically-based ray tracer')
-    parser.add_argument('--width', type=int, default=2000, help='Image width in pixels')
+    parser.add_argument('--width', type=int, default=200, help='Image width in pixels')
     parser.add_argument('--samples', type=int, default=20, help='Samples per pixel')
-    parser.add_argument('--depth', type=int, default=15, help='Maximum ray bounce depth')
+    parser.add_argument('--depth', type=int, default=10, help='Maximum ray bounce depth')
     parser.add_argument('--out', type=str, default='render', help='Output file prefix (render.ppm and render.png)')
     args = parser.parse_args()
     render(image_width=args.width, samples_per_pixel=args.samples, max_depth=args.depth, out_prefix=args.out)

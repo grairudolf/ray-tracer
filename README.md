@@ -68,12 +68,16 @@ and a simple camera.
 What is a ray tracer?
 ----------------------
 
-A ray tracer simulates light by tracing paths (rays) from a camera into a
-scene. For each pixel we shoot rays, find the nearest object intersection,
-compute the surface response (diffuse reflection, metallic reflection,
-refraction), and accumulate color. This project implements basic materials
-(Lambertian diffuse, metal, dielectric) and recursive sampling for indirect
-lighting.
+A ray tracer is a program that creates images by simulating how light travels.
+Imagine the camera as an eye: for each pixel the tracer sends one or more
+rays into the scene to see what they hit. When a ray hits a surface, the
+renderer computes how that surface interacts with light — whether the light
+is absorbed, scattered (diffuse), reflected (mirror-like), or bent
+(refracted). By sending many rays per pixel and allowing rays to bounce,
+the tracer builds up realistic lighting, shadows, reflections, and
+transparent effects. This repository implements those basics using simple
+sphere geometry and three material models (diffuse, metal, dielectric), and
+uses recursive sampling to approximate indirect illumination.
 
 Project overview
 ----------------
