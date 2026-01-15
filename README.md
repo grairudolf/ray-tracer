@@ -4,7 +4,8 @@
 This repository contains a compact, educational, physically-based ray tracer
 implemented in pure Python. It's intentionally focused on mathematical
 correctness and clarity rather than performance.
-![Alt text](render.png)
+<img src="render.png" width="400" />
+
 
 
 Contents
