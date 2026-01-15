@@ -4,10 +4,9 @@
 This repository contains a compact, educational, physically-based ray tracer
 implemented in pure Python. It's intentionally focused on mathematical
 correctness and clarity rather than performance.
+<br>
 <img src="render.png" width="400" />
-
-
-
+<br>
 Contents
 - `vec3.py`: vector math utilities (Vec3) with reflection/refraction helpers
 - `ray.py`: Ray class (origin + direction * t)
